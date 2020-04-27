@@ -1,0 +1,32 @@
+server.port=8081
+server.servlet.context-path=/
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.url=jdbc:mysql://localhost:3306/testdb?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT
+spring.datasource.username=root
+spring.datasource.password=123456
+spring.datasource.type=com.alibaba.druid.pool.DruidDataSource
+spring.datasource.druid.filters=stat
+spring.datasource.druid.stat-view-servlet.enabled=true
+# 添加过滤规则
+spring.datasource.druid.web-stat-filter.url-pattern=/*
+# 添加不需要忽略的格式信息
+spring.datasource.druid.web-stat-filter.exclusions=*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid2/*
+# 自定义监控页面路径
+spring.datasource.druid.stat-view-servlet.url-pattern=/druid/*
+
+mybatis-plus.type-aliases-package=com.choice.his.model
+mybatis-plus.mapper-locations=classpath:mappers/*Mapper.xml
+# 遵循java驼峰命名规则(产生自动映射@Column()),自动映射(mysql:user_name--->java:userName)
+mybatis-plus.configuration.map-underscore-to-camel-case=true
+
+mybatis-plus.configuration.log-impl=org.apache.ibatis.logging.stdout.StdOutImpl
+
+spring.application.name=testprovider-interface
+
+eureka.client.service-url.defaultZone=http://eureka01:7081/eureka,http://eureka02:7082/eureka,http://eureka03:7083/eureka
+eureka.instance.instance-id=interface-provider-8081
+
+info.app.name=interface-provider-8081
+info.app.port=8081
+info.app.author=JoeWang
+info.company.name=NoWhere
