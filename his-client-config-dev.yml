@@ -1,0 +1,116 @@
+server:
+  port: 9090
+
+redis:
+  prefix: ${spring.application.name}
+
+spring:
+  application:
+    name: his-client
+  profiles:
+    active: dev
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10000000  #单个文件的最大上限
+      max-request-size: 100000000 #单个请求的文件总大小上限
+
+  rabbitmq:
+    host: 121.199.3.141
+    port: 5672
+    username: admin
+    password: admin123
+#    host: 127.0.0.1
+#    port: 5672
+#    username: guest
+#    password: guest
+    virtual-host: /
+    publisherConfirms: true
+    publisherReturns: true
+    # 设置手动确认(ack)
+    listener:
+      simple:
+        acknowledge-mode: manual
+        prefetch: 100
+
+  redis:
+    #数据库索引
+    database: 0
+    host: 121.199.3.141
+    port: 6379
+    password: admin123
+    #连接超时时间
+    timeout: 10000
+    jedis:
+      pool:
+        #最大连接数
+        max-active: -1
+        #最大阻塞等待时间(负数表示没限制)
+        max-wait: -1
+        #最大空闲
+        max-idle: 500
+        #最小空闲
+        min-idle: 50
+
+  datasource:
+    # 配置数据源
+    driver-class-name: com.mysql.jdbc.Driver
+    # 使用druid连接池
+    #    url: jdbc:mysql://127.0.0.1:3306/idb?characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&useSSL=true
+    url: jdbc:mysql://127.0.0.1:3306/idb?characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&useSSL=false
+    username: root
+    password: root
+    # 数据源类型
+    type: com.zaxxer.hikari.HikariDataSource
+    # 连接池名称，默认HikariPool-1
+    hikari:
+      pool-name: KevinHikariPool
+      # 最大连接数，小于等于0会被重置为默认值10；大于零小于1会被重置为minimum-idle的值
+      maximum-pool-size: 12
+      # 连接超时时间:毫秒，小于250毫秒，否则被重置为默认值30秒
+      connection-timeout: 60000
+      # 最小空闲连接，默认值10，小于0或大于maximum-pool-size，都会重置为maximum-pool-size
+      minimum-idle: 10
+      # 空闲连接超时时间，默认值600000（10分钟），大于等于max-lifetime且max-lifetime>0，会被重置为0；不等于0且小于10秒，会被重置为10秒。
+      # 只有空闲连接数大于最大连接数且空闲时间超过该值，才会被释放
+      idle-timeout: 500000
+      # 连接最大存活时间.不等于0且小于30秒，会被重置为默认值30分钟.设置应该比mysql设置的超时时间短
+      max-lifetime: 540000
+      # 连接测试查询
+      connection-test-query: SELECT 1
+
+mybatis-plus:
+  mapper-locations: classpath:/mappers/*Mapper.xml
+  global-config:
+    db-config:
+      id-type: auto
+      field-strategy: not_empty
+      table-underline: true
+      db-type: mysql
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:7001/eureka,http://127.0.0.1:7002/eureka,http://127.0.0.1:7003/eureka
+  instance:
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${spring.application.instance_id:${server.port}}
+    prefer-ip-address: true
+    ip-address: 127.0.0.1
+actuator:
+  info:
+    app.name: ${spring.application.name}
+
+
+# 开启Feign对Hystrix的支持
+feign:
+  hystrix:
+    enabled: true
+
+  client:
+    config:
+      default:
+        connectTimeout: 5000  # 指定Feign连接提供者的超时时限
+        readTimeout: 5000    # 指定Feign从请求到获取提供者响应的超时时限
