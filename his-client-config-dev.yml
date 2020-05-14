@@ -7,8 +7,6 @@ redis:
 spring:
   application:
     name: his-client
-  profiles:
-    active: dev
 
   servlet:
     multipart:
